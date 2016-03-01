@@ -1,0 +1,26 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+repositories {
+
+    mavenCentral()
+
+}
+
+dependencies {
+    compile 'com.nanohttpd:nanohttpd-webserver:2.1.1'
+}
+
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.limelight.emulator.Emulator'
+    }
+}
+
+group = 'com.limelight.emulator'
+project.sourceCompatibility = '1.6'
+project.targetCompatibility = '1.6'
+mainClassName = 'com.limelight.emulator.Emulator'
