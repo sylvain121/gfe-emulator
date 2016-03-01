@@ -10,7 +10,6 @@ repositories {
 }
 
 dependencies {
-    compile 'com.nanohttpd:nanohttpd-webserver:2.2.0'
     compile 'com.github.rickyclarkson:jmdns:3.4.2-r353-1'
 }
 

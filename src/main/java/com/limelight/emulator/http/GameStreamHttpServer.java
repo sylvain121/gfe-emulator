@@ -1,42 +1,25 @@
 package com.limelight.emulator.http;
 
-import fi.iki.elonen.NanoHTTPD;
 
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 
-
-import javax.xml.ws.Response;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
 
-
-/**
- * Created by sylvain121 on 01/03/16.
- */
-
-public class GameStreamHttpServer extends NanoHTTPD {
+public class GameStreamHttpServer  {
 
     private static final int HTTP_PORT = 47989;
-    private static final int HTTPS_PORT = 47984;
 
     public GameStreamHttpServer() throws IOException {
-        super(HTTPS_PORT);
-    }
+        HttpServer server = HttpServer.create(new InetSocketAddress(HTTP_PORT), 0);
 
-    @Override
-    public Response serve(IHTTPSession session) {
 
-        String uri = session.getUri();
-        System.out.println(uri);
-        String data = "";
-        if(uri.equals("/serverinfo")) {
-            data = this.returnServerInfo(session.getQueryParameterString());
-        }
-        return newFixedLengthResponse(Response.Status.OK, "application/xml", data);
-
-    }
-
-    private String returnServerInfo(String queryParameterString) {
-        return "<root><appversion>2.2.2</appversion><PairStatus>1</PairStatus></root>";
+        //server.createContext("/serverinfo", new serviceInfoHandler());
+        server.setExecutor(null);
+        server.start();
     }
 }
