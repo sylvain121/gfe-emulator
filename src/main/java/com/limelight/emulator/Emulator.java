@@ -10,22 +10,23 @@ import com.limelight.emulator.dataparser.H264Parser;
 import com.limelight.emulator.handshake.Handshake;
 import com.limelight.emulator.http.GameStreamHttpServer;
 import com.limelight.emulator.input.Input;
+import com.limelight.emulator.mdns.Mdns;
+import fi.iki.elonen.NanoHTTPD;
 
 public class Emulator {
 	public static void main(String[] args) throws IOException {
-		if (args.length < 2) {
-			System.out.println("Usage: gfe-emulator <.h264 file>");
-			return;
-		}
-		
+
 		H264Parser parser = new H264Parser();
-		parser.loadFile(new File(args[1]));
+		parser.loadFile(new File("/home/sylvain/src/gfe-emulator/test.h264"));
 		
 		Handshake h = new Handshake();
 		Control c = new Control();
 		Input i = new Input();
 		Video v = new Video(new VideoPacketizer(parser));
 		GameStreamHttpServer http = new GameStreamHttpServer();
+		http.makeSecure(NanoHTTPD.makeSSLSocketFactory("home/sylvain/src/gfe-emulator/keystore.jks", "password".toCharArray()), null);
+        http.start();
+		new Mdns();
 		
 		h.start();
 		c.start();
