@@ -8,6 +8,7 @@ import com.limelight.emulator.av.VideoPacketizer;
 import com.limelight.emulator.control.Control;
 import com.limelight.emulator.dataparser.H264Parser;
 import com.limelight.emulator.handshake.Handshake;
+import com.limelight.emulator.http.GameStreamHttpServer;
 import com.limelight.emulator.input.Input;
 
 public class Emulator {
@@ -24,6 +25,7 @@ public class Emulator {
 		Control c = new Control();
 		Input i = new Input();
 		Video v = new Video(new VideoPacketizer(parser));
+		GameStreamHttpServer http = new GameStreamHttpServer();
 		
 		h.start();
 		c.start();
