@@ -5,12 +5,16 @@ apply plugin: 'application'
 
 repositories {
 
-    mavenCentral()
+    maven {
+        url 'http://repo1.maven.org/maven2/'
+    }
 
 }
 
 dependencies {
     compile 'com.github.rickyclarkson:jmdns:3.4.2-r353-1'
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.squareup.okhttp:okhttp:2.4.0'
 }
 
 

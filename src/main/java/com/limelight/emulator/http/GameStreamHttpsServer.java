@@ -6,7 +6,6 @@ import com.sun.net.httpserver.*;
 import javax.net.ssl.*;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.security.*;
 import java.security.cert.CertificateException;
@@ -58,9 +57,10 @@ public class GameStreamHttpsServer {
             }
         } );
 
-        server.createContext("/serverinfo", new serviceInfoHandler());
-        server.createContext("/applist", new appListHandler());
-        server.createContext("/", new loggerHandler());
+        server.createContext("/serverinfo", new ServiceInfoHandler());
+        server.createContext("/applist", new AppListHandler());
+        server.createContext("/launch", new LaunchHandler());
+        server.createContext("/", new LoggerHandler());
         server.setExecutor(null);
         server.start();
     }

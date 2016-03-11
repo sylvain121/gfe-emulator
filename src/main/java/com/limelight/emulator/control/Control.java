@@ -27,7 +27,7 @@ public class Control {
 							InputStream sin = s.getInputStream();
 							OutputStream sout = s.getOutputStream();
 							while (sin.read() != -1) {
-								// Send some garbage so handshake can finish
+								System.out.println("control data");
 								sout.write(0);
 							}
 						} catch (IOException e) {

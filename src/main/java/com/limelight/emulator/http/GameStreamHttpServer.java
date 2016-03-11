@@ -18,7 +18,7 @@ public class GameStreamHttpServer  {
         HttpServer server = HttpServer.create(new InetSocketAddress(HTTP_PORT), 0);
 
 
-        //server.createContext("/serverinfo", new serviceInfoHandler());
+        //server.createContext("/serverinfo", new ServiceInfoHandler());
         server.setExecutor(null);
         server.start();
     }
