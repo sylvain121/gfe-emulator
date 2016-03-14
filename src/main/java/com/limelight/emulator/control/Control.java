@@ -27,8 +27,8 @@ public class Control {
 							InputStream sin = s.getInputStream();
 							OutputStream sout = s.getOutputStream();
 							while (sin.read() != -1) {
-								System.out.println("control data");
-								sout.write(0);
+								System.out.println(sin.read());
+								//sout.write(0);
 							}
 						} catch (IOException e) {
 							// Client died; continue

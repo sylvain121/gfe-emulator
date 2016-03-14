@@ -21,13 +21,13 @@ import com.limelight.emulator.mdns.Mdns;
 public class Emulator {
 	public static void main(String[] args) throws IOException {
 
-		/*H264Parser parser = new H264Parser();
+		H264Parser parser = new H264Parser();
 		parser.loadFile(new File("/home/sylvain/src/gfe-emulator/test.h264"));
-		*/
-		Handshake h = new Handshake();/*
+
+		Handshake h = new Handshake();
 		Control c = new Control();
 		Input i = new Input();
-		Video v = new Video(new VideoPacketizer(parser));*/
+		Video v = new Video(new VideoPacketizer(parser));
 		try {
 			GameStreamHttpsServer http = new GameStreamHttpsServer();
 		} catch (NoSuchAlgorithmException e) {
@@ -43,9 +43,9 @@ public class Emulator {
 		}
 		new Mdns();
 		
-		h.start();/*
+		h.start();
 		c.start();
 		i.start();
-		v.start();*/
+		v.start();
 	}
 }

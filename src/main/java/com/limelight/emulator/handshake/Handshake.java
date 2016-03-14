@@ -33,19 +33,16 @@ public class Handshake {
 							InputStream sin = s.getInputStream();
 							OutputStream sout = s.getOutputStream();
 
+							SdpParser sdpParser = new SdpParser();
 
-							RtspStream rtspStream = new RtspStream(s.getInputStream(), s.getOutputStream());
 							while(true) {
-								RtspRequest resp = (RtspRequest) rtspStream.read();
-
+								RtspStream rtspStream = new RtspStream(s.getInputStream(), s.getOutputStream());
+								RtspRequest request = (RtspRequest) rtspStream.read();
+								RtspResponse response = sdpParser.parse(request);
+								rtspStream.write(response);
+								rtspStream.close();
 							}
 
-/*
-							while ( sin.read() != -1) {
-								System.out.println("Handhake data" + sin.read());
-								sout.write(0);
-							}
-*/
 						} catch (IOException e) {
 							// Client died; continue
 						}
@@ -56,4 +53,6 @@ public class Handshake {
 			}
 		}.start();
 	}
+
+
 }
