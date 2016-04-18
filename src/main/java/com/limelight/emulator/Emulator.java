@@ -22,7 +22,7 @@ public class Emulator {
 	public static void main(String[] args) throws IOException {
 
 		H264Parser parser = new H264Parser();
-		parser.loadFile(new File("/home/sylvain/src/gfe-emulator/test.h264"));
+		parser.loadFile(new File("/home/sylvain/src/gfe-emulator/test2.h264"));
 
 		Handshake h = new Handshake();
 		Control c = new Control();

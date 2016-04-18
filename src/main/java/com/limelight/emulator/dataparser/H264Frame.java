@@ -3,6 +3,7 @@ package com.limelight.emulator.dataparser;
 import java.util.ArrayList;
 
 public class H264Frame {
+
 	private ArrayList<H264NAL> NALs;
 	private int length;
 	
@@ -17,7 +18,12 @@ public class H264Frame {
 	public int getLength() {
 		return length;
 	}
-	
+
+	public ArrayList<H264NAL> getNALs() {
+		return NALs;
+	}
+
+
 	public byte[] toBytes() {
 		int offset = 0;
 		byte[] buffer = new byte[length];

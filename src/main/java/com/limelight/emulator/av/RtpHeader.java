@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 public class RtpHeader {
 	private byte[] payload;
 	
-	public static final int HEADER_SIZE = 12;
+	public static final int HEADER_SIZE = 16;
 	
 	static short sequenceNumber = 0;
 	

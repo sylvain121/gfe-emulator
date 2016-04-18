@@ -22,4 +22,8 @@ public class H264NAL {
 	public boolean isPps() {
 		return isType((byte)0x68);
 	}
+
+	public boolean isIframe() {
+		return isType((byte)0x65);
+	}
 }

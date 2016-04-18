@@ -3,6 +3,7 @@ package com.limelight.emulator.dataparser;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -26,8 +27,7 @@ public class H264Parser {
 		}
 		
 		// Find the next frame start
-		while (fileData[startOffset] != 0 || fileData[startOffset+1] != 0 ||
-				fileData[startOffset+2] != 0 || fileData[startOffset+3] != 1) {
+		while (fileData[startOffset] != 0 || fileData[startOffset+1] != 0 || fileData[startOffset+2] != 0 || fileData[startOffset+3] != 1) {
 			startOffset++;
 			
 			if (startOffset + 4 >= fileData.length) {
@@ -67,6 +67,7 @@ public class H264Parser {
 		int frameEnd = 0;
 		int frameIndex = 0;
 		for (;;) {
+            System.out.println("---------------");
 			// Search for the next frame from the end of the last
 			frameStart = findFrameStart(fileData, frameEnd);
 			if (frameStart == -1) {
@@ -79,9 +80,9 @@ public class H264Parser {
 				frameEnd = fileData.length;
 			}
 			
-			//System.out.println("Frame "+frameIndex+" is from "+frameStart+" to "+frameEnd);
+			System.out.println("Frame "+frameIndex+" is from "+frameStart+" to "+frameEnd);
 			ArrayList<H264NAL> nalList = new ArrayList<H264NAL>();
-			
+            byte[] rawFrame = Arrays.copyOfRange(fileData, frameStart, frameEnd);
 			int nalStart = frameStart;
 			int nalEnd = frameStart;
 			for (;;) {
@@ -101,7 +102,7 @@ public class H264Parser {
 					break;
 				}
 			}
-						
+			boolean frameContainPPS = false;
 			// Find any SPS or PPS data
 			for (H264NAL nal : nalList) {
 				if (nal.isSps()) {
@@ -111,6 +112,10 @@ public class H264Parser {
 				else if (nal.isPps()) {
 					System.out.println("Found PPS NAL");
 					ppsNal = nal;
+					frameContainPPS = true;
+				}
+				else if (nal.isIframe()) {
+					System.out.println("Found I Frame");
 				}
 			}
 			
@@ -118,8 +123,19 @@ public class H264Parser {
 				break;
 			}
 			
-			//System.out.println("Frame "+frameIndex+" is finished with "+nalList.size()+" NALs");
-			frames.add(new H264Frame(nalList));
+			System.out.println("Frame "+frameIndex+" is finished with "+nalList.size()+" NALs");
+			if(frameContainPPS){
+				// merge previous frame with sps and current to build IDR frame
+				H264Frame spsFrame = frames.pollLast();
+				ArrayList<H264NAL> nals = spsFrame.getNALs();
+				while(!nals.isEmpty()) {
+					H264NAL n = nals.remove(nals.size()-1);
+					nalList.add(0, n);
+				}
+			}
+
+			H264Frame frame = new H264Frame(nalList);
+			frames.add(frame);
 			frameIndex++;
 			
 			if (frameEnd == fileData.length) {
@@ -135,9 +151,10 @@ public class H264Parser {
 	}
 	
 	public H264Frame nextFrame() {
-		// Wait 33 ms (30 FPS)
+		// Wait 16 ms (60 FPS)
+		//Waite 33 ms (30 FPS)
 		try {
-			Thread.sleep(33);
+			Thread.sleep(16);
 		} catch (InterruptedException e) {
 			return null;
 		}

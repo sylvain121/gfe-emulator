@@ -26,7 +26,8 @@ public class Input {
 							// Wait for the client to close this connection
 							InputStream sin = s.getInputStream();
 							while (sin.read() != -1) {
-								System.out.println("Handhake data");
+								//System.out.println("Input data received");
+								//TODO HANDLE input packet
 							}
 						} catch (IOException e) {
 							// Client died; continue

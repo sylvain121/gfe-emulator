@@ -12,7 +12,7 @@ public class VideoPacketizer {
 	private H264Parser parser;
 	private boolean needsIdr;
 	
-	private int streamPacketIndex;
+	private int streamPacketIndex = 1;
 	private int frameIndex;
 	private int packetIndex;
 	
@@ -42,7 +42,7 @@ public class VideoPacketizer {
 		}
 		
 		byte[] frameData = frame.toBytes();
-		
+
 		int totalPackets = frameData.length / (VideoHeader.PACKET_SIZE - VideoHeader.HEADER_SIZE);
 		totalPackets += (frameData.length % (VideoHeader.PACKET_SIZE - VideoHeader.HEADER_SIZE) != 0) ? 1 : 0;
 				
@@ -56,15 +56,17 @@ public class VideoPacketizer {
 			offset += VideoHeader.PACKET_SIZE - VideoHeader.HEADER_SIZE;
 			
 			int flags = 0;
-			
 			if (packets.isEmpty()) {
 				flags |= VideoHeader.FLAG_SOF;
 			}
-			if (offset >= frameData.length) {
+            if (offset >= frameData.length) {
 				flags |= VideoHeader.FLAG_EOF;
 			}
-			
-			packets.add(new RtpHeader(new VideoHeader(frameIndex, packetIndex++, totalPackets, flags, streamPacketIndex++, videoPayload).toBytes()));
+			flags |= VideoHeader.FLAG_CONTAINS_PIC_DATA;
+
+			byte[] vh = new VideoHeader(frameIndex, packetIndex++, totalPackets, flags, streamPacketIndex++, videoPayload).toBytes();
+			RtpHeader rh = new RtpHeader(vh);
+			packets.add(rh);
 		} while (offset < frameData.length);
 		
 		packetIterator = packets.iterator();
